@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kunal — Systems &amp; Deploys</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0F1B2D;
+    --bg-2:#132540;
+    --grid:#1B2E4A;
+    --amber:#F5A623;
+    --cyan:#8FD8F0;
+    --off:#EDEFF2;
+    --dim:#8593A8;
+    --ok:#6FCF97;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--off);
+    font-family:var(--sans);
+    line-height:1.6;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:48px 48px;
+    background-position:center top;
+  }
+
+  a{ color:var(--cyan); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+
+  ::selection{ background:var(--amber); color:var(--bg); }
+
+  :focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:80px 0 60px;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .eyebrow::before{
+    content:'';
+    width:8px;
+    height:8px;
+    background:var(--ok);
+    border-radius:50%;
+    box-shadow:0 0 8px var(--ok);
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.4; }
+  }
+
+  .terminal{
+    background:var(--bg-2);
+    border:1px solid var(--grid);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+    margin-bottom:40px;
+  }
+
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    background:#0C1727;
+    border-bottom:1px solid var(--grid);
+  }
+
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.r{ background:#E4635B; }
+  .dot.y{ background:#E5B95C; }
+  .dot.g{ background:#61C454; }
+
+  .terminal-title{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--dim);
+    margin-left:8px;
+  }
+
+  .terminal-body{
+    padding:24px;
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--cyan);
+    min-height:170px;
+  }
+
+  .terminal-body .line{ margin-bottom:10px; opacity:0; animation:reveal 0.3s forwards; }
+  .terminal-body .prompt{ color:var(--ok); }
+  .terminal-body .path{ color:var(--amber); }
+  .terminal-body .out{ color:var(--dim); }
+  .terminal-body .name{ color:var(--off); font-weight:600; }
+
+  @keyframes reveal{ to{ opacity:1; } }
+
+  .cursor{
+    display:inline-block;
+    width:8px;
+    height:16px;
+    background:var(--cyan);
+    animation:blink 1s step-end infinite;
+    vertical-align:text-bottom;
+  }
+
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  h1{
+    font-family:var(--mono);
+    font-size:clamp(32px, 6vw, 52px);
+    font-weight:700;
+    color:var(--off);
+    letter-spacing:-0.01em;
+    margin-bottom:16px;
+  }
+
+  h1 span{ color:var(--amber); }
+
+  .lede{
+    font-size:18px;
+    color:var(--dim);
+    max-width:52ch;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--grid); }
+
+  .section-head{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:24px;
+  }
+
+  .section-head::before{ content:'# '; color:var(--dim); }
+
+  #about p{ color:var(--dim); font-size:16px; max-width:60ch; margin-bottom:14px; }
+  #about p strong{ color:var(--off); font-weight:600; }
+
+  /* ---------- STATUS LIST ---------- */
+  .status-list{ display:flex; flex-direction:column; border:1px solid var(--grid); border-radius:8px; overflow:hidden; }
+
+  .status-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    background:var(--bg-2);
+  }
+
+  .status-row + .status-row{ border-top:1px solid var(--grid); }
+
+  .status-left{ display:flex; align-items:center; gap:14px; }
+
+  .status-name{ font-family:var(--mono); font-size:14px; color:var(--off); }
+  .status-desc{ font-size:13px; color:var(--dim); margin-top:2px; }
+
+  .status-badge{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ok);
+    background:rgba(111,207,151,0.12);
+    border:1px solid rgba(111,207,151,0.3);
+    padding:4px 10px;
+    border-radius:4px;
+    white-space:nowrap;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .config-block{
+    font-family:var(--mono);
+    font-size:14px;
+    background:var(--bg-2);
+    border:1px solid var(--grid);
+    border-radius:8px;
+    padding:24px;
+  }
+
+  .config-block .key{ color:var(--amber); }
+  .config-block .val{ color:var(--cyan); }
+  .config-block .rem{ color:var(--dim); }
+  .config-block div{ margin-bottom:8px; }
+  .config-block div:last-child{ margin-bottom:0; }
+
+  footer{
+    padding:40px 0 60px;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--dim);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+  }
+
+  @media (max-width:600px){
+    .hero{ padding:60px 0 40px; }
+    section{ padding:48px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">status: online</div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot r"></span>
+        <span class="dot y"></span>
+        <span class="dot g"></span>
+        <span class="terminal-title">kunal@ec2 — 80×20</span>
+      </div>
+      <div class="terminal-body" id="term"></div>
+    </div>
+
+    <h1>Hi, I'm <span>Kunal</span>.</h1>
+    <p class="lede">I build and run things on servers — provisioning, deploying, and keeping them online. This page is proof the box works.</p>
+  </section>
+
+  <section id="about">
+    <div class="section-head">about</div>
+    <p>I work close to the infrastructure layer — <strong>Linux servers</strong>, <strong>AWS</strong>, and the pipelines that get code from a laptop onto a running instance.</p>
+    <p>Lately that's meant EC2, Jenkins, SSH key management, and the small config details that decide whether a deploy works on the first try or the fifth.</p>
+  </section>
+
+  <section id="stack">
+    <div class="section-head">systemctl status</div>
+    <div class="status-list">
+      <div class="status-row">
+        <div class="status-left">
+          <div>
+            <div class="status-name">aws-ec2.service</div>
+            <div class="status-desc">Compute — provisioning &amp; hosting</div>
+          </div>
+        </div>
+        <span class="status-badge">active</span>
+      </div>
+      <div class="status-row">
+        <div class="status-left">
+          <div>
+            <div class="status-name">jenkins.service</div>
+            <div class="status-desc">CI/CD — build &amp; deploy pipelines</div>
+          </div>
+        </div>
+        <span class="status-badge">active</span>
+      </div>
+      <div class="status-row">
+        <div class="status-left">
+          <div>
+            <div class="status-name">linux-admin.service</div>
+            <div class="status-desc">Ubuntu &amp; Amazon Linux, day to day</div>
+          </div>
+        </div>
+        <span class="status-badge">active</span>
+      </div>
+      <div class="status-row">
+        <div class="status-left">
+          <div>
+            <div class="status-name">java.service</div>
+            <div class="status-desc">Application runtime</div>
+          </div>
+        </div>
+        <span class="status-badge">active</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="section-head">contact.conf</div>
+    <div class="config-block">
+      <div><span class="rem"># reach out</span></div>
+      <div><span class="key">email</span> = <span class="val"><a href="mailto:kunal@example.com">kunal@example.com</a></span></div>
+      <div><span class="key">github</span> = <span class="val"><a href="https://github.com/" target="_blank" rel="noopener">github.com/kunal</a></span></div>
+      <div><span class="key">location</span> = <span class="val">Mumbai, IN</span></div>
+    </div>
+  </section>
+
+  <footer>
+    served from an EC2 instance, ap-south-1
+  </footer>
+
+</div>
+
+<script>
+  const lines = [
+    { html: '<span class="prompt">$</span> ssh kunal@ec2-instance' },
+    { html: '<span class="out">Warning: Permanently added host key.</span>' },
+    { html: '<span class="prompt">$</span> whoami' },
+    { html: '<span class="name">kunal</span> <span class="out">— builds things, ships them, keeps them running</span>' }
+  ];
+
+  const term = document.getElementById('term');
+  let delay = 200;
+
+  lines.forEach((l, i) => {
+    const div = document.createElement('div');
+    div.className = 'line';
+    div.innerHTML = l.html;
+    div.style.animationDelay = delay + 'ms';
+    term.appendChild(div);
+    delay += 550;
+  });
+
+  const cursorLine = document.createElement('div');
+  cursorLine.className = 'line';
+  cursorLine.style.animationDelay = delay + 'ms';
+  cursorLine.innerHTML = '<span class="prompt">$</span> <span class="cursor"></span>';
+  term.appendChild(cursorLine);
+</script>
+
+</body>
+</html>
